@@ -74,9 +74,11 @@
                 </a>
             </li>
             <li>
-                <a th:href="@{/logout}" class="nav-link" title="Đăng xuất"><i class="fa-solid :fa-users red" style="width: 20px;"></i>
-                Đăng xuất
-            </a>
+              <form th:action="@{/logout}" method="post">
+    <button type="submit" class="nav-link">
+        Đăng xuất
+    </button>
+</form>
             </li>
         </ul>
         <hr class="text-secondary m-0">

@@ -41,6 +41,10 @@ public class Order {
 		this.shippingAddress = shippingAddress;
 	}
 
+	public Order() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public Integer getId() {
 		return id;
 	}

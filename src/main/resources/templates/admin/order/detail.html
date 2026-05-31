@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout}">
+<head>
+    <title>Chi Tiết Đơn Hàng</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0"><i class="fa-solid :fa-box"></i> Danh Sách Sản Phẩm Trong Đơn</h5>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width: 10%;" class="text-center">Ảnh</th>
+                                <th>Tên điện thoại</th>
+                                <th style="width: 15%;" class="text-end">Đơn giá</th>
+                                <th style="width: 12%;" class="text-center">Số lượng</th>
+                                <th style="width: 20%;" class="text-end">Thành tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="item : ${orderDetails}">
+                                <td class="text-center">
+                                    <img th:src="${item.product.image != null && item.product.image != ''} ? ${item.product.image} : 'https://placehold.co/50x50?text=Phone'" 
+                                         class="img-thumbnail" style="max-height: 50px;">
+                                </td>
+                                <td>
+                                    <span class="fw-bold text-dark" th:text="${item.product.name}">iPhone</span>
+                                </td>
+                                <td class="text-end text-muted" 
+                                    th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')} + ' đ'">0 đ</td>
+                                <td class="text-center" th:text="${item.quantity}">1</td>
+                                <td class="text-end text-danger fw-bold" 
+                                    th:text="${#numbers.formatDecimal(item.price * item.quantity, 0, 'COMMA', 0, 'POINT')} + ' đ'">0 đ</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="p-3 bg-light text-end border-top">
+                        <span class="fs-5 fw-bold text-dark me-2">Tổng giá trị đơn hàng:</span>
+                        <span class="fs-4 fw-bold text-danger" 
+                              th:text="${#numbers.formatDecimal(order.totalPrice, 0, 'COMMA', 0, 'POINT')} + ' đ'">0 đ</span>
+                    </div>
+                </div>
+            </div>
+            
+            <a th:href="@{/admin/orders}" class="btn btn-secondary">
+                <i class="fa-solid :fa-arrow-left"></i> Quay lại danh sách đơn hàng
+            </a>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0"><i class="fa-solid :fa-info-circle"></i> Thông Tin Giao Nhận</h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-2"><strong>Mã hóa đơn:</strong> <span class="text-primary fw-bold" th:text="'#' + ${order.id}">#1</span></p>
+                    <p class="mb-2"><strong>Tài khoản đặt:</strong> <span th:text="${order.user.username}">User</span></p>
+                    <p class="mb-2"><strong>Thời gian đặt:</strong> <span th:text="${#temporals.format(order.createdDate, 'dd/MM/yyyy HH:mm')}">Date</span></p>
+                    <hr>
+                    <p class="mb-1"><strong>Địa chỉ giao hàng:</strong></p>
+                    <p class="text-muted bg-light p-2 rounded border" 
+                       th:text="${order.shippingAddress != null && order.shippingAddress != ''} ? ${order.shippingAddress} : 'Chưa cập nhật địa chỉ (Đơn hàng dạng Giỏ hàng)'">Địa chỉ</p>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-warning">
+                <div class="card-header bg-warning text-dark fw-bold">
+                    <i class="fa-solid :fa-user-gear"></i> Xử Lý Trạng Thái Đơn
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label small text-muted fw-bold">Trạng thái hiện tại:</label>
+                        <div class="fs-5 fw-bold text-center p-2 rounded bg-light border border-dark-subtle text-primary">
+                            <span th:text="${order.status}">PENDING</span>
+                        </div>
+                    </div>
+
+                    <form th:action="@{/admin/orders/update-status}" method="post">
+                        <input type="hidden" name="orderId" th:value="${order.id}">
+                        
+                        <div class="mb-3">
+                            <label for="statusSelect" class="form-label small text-muted fw-bold">Chuyển sang trạng thái:</label>
+                            <select id="statusSelect" name="status" class="form-select" required>
+                                <option value="PENDING" th:selected="${order.status == 'PENDING'}">Chờ phê duyệt (PENDING)</option>
+                                <option value="CONFIRMED" th:selected="${order.status == 'CONFIRMED'}">Xác nhận đơn (CONFIRMED)</option>
+                                <option value="SHIPPING" th:selected="${order.status == 'SHIPPING'}">Đang đi giao (SHIPPING)</option>
+                                <option value="DELIVERED" th:selected="${order.status == 'DELIVERED'}">Giao thành công (DELIVERED)</option>
+                                <option value="CANCELLED" th:selected="${order.status == 'CANCELLED'}">Hủy đơn hàng (CANCELLED)</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-warning text-dark fw-bold w-100" 
+                                onclick="return confirm('Bạn chắc chắn muốn cập nhật trạng thái đơn hàng này?')">
+                            <i class="fa-solid :fa-floppy-disk"></i> Cập Nhật Trạng Thái
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

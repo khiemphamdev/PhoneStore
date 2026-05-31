@@ -34,6 +34,10 @@ public class OrderDetail {
 		this.price = price;
 	}
 
+	public OrderDetail() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public Integer getId() {
 		return id;
 	}

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout}">
+<head>
+    <title>Quản Lý Đơn Hàng</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="fa-solid :fa-file-invoice-dollar"></i> Quản Lý Đơn Hàng Khách Hàng</h5>
+        </div>
+        <div class="card-body">
+
+            <form th:action="@{/admin/orders}" method="get" class="row g-3 mb-4 align-items-center">
+                <div class="col-auto">
+                    <label class="fw-bold text-muted small">Lọc theo trạng thái:</label>
+                </div>
+                <div class="col-md-4 col-6">
+                    <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                        <option value="ALL" th:selected="${selectedStatus == 'ALL'}">-- Tất cả đơn hàng --</option>
+                        <option value="CART" th:selected="${selectedStatus == 'CART'}">Giỏ hàng của khách (CART)</option>
+                        <option value="PENDING" th:selected="${selectedStatus == 'PENDING'}">Chờ phê duyệt (PENDING)</option>
+                        <option value="CONFIRMED" th:selected="${selectedStatus == 'CONFIRMED'}">Đã xác nhận (CONFIRMED)</option>
+                        <option value="SHIPPING" th:selected="${selectedStatus == 'SHIPPING'}">Đang giao hàng (SHIPPING)</option>
+                        <option value="DELIVERED" th:selected="${selectedStatus == 'DELIVERED'}">Giao thành công (DELIVERED)</option>
+                        <option value="CANCELLED" th:selected="${selectedStatus == 'CANCELLED'}">Đã hủy đơn (CANCELLED)</option>
+                    </select>
+                </div>
+            </form>
+
+            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fa-solid :fa-circle-check"></i> <span th:text="${successMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fa-solid :fa-circle-exclamation"></i> <span th:text="${errorMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover align-middle mb-0">
+                    <thead class="table-dark text-center">
+                        <tr>
+                            <th style="width: 8%;">Mã Đơn</th>
+                            <th>Tài khoản mua</th>
+                            <th>Ngày đặt hàng</th>
+                            <th>Tổng giá trị</th>
+                            <th style="width: 15%;">Trạng thái</th>
+                            <th style="width: 12%;">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="order : ${orders}">
+                            <td class="text-center fw-bold" th:text="${order.id}">1001</td>
+                            <td>
+                                <i class="fa-solid :fa-user text-muted small me-1"></i>
+                                <span th:text="${order.user.username}">username</span>
+                            </td>
+                            <td class="text-center" th:text="${#temporals.format(order.createdDate, 'dd/MM/yyyy HH:mm')}">01/01/2026 12:00</td>
+                            <td class="text-end text-danger fw-bold" 
+                                th:text="${#numbers.formatDecimal(order.totalPrice, 0, 'COMMA', 0, 'POINT')} + ' đ'">0 đ</td>
+                            <td class="text-center">
+                                <span th:if="${order.status == 'CART'}" class="badge bg-secondary">Giỏ hàng</span>
+                                <span th:if="${order.status == 'PENDING'}" class="badge bg-warning text-dark"><i class="fa-solid :fa-clock"></i> Chờ duyệt</span>
+                                <span th:if="${order.status == 'CONFIRMED'}" class="badge bg-info text-dark"><i class="fa-solid :fa-thumbs-up"></i> Đã xác nhận</span>
+                                <span th:if="${order.status == 'SHIPPING'}" class="badge bg-primary"><i class="fa-solid :fa-truck"></i> Đang giao</span>
+                                <span th:if="${order.status == 'DELIVERED'}" class="badge bg-success"><i class="fa-solid :fa-circle-check"></i> Thành công</span>
+                                <span th:if="${order.status == 'CANCELLED'}" class="badge bg-danger"><i class="fa-solid :fa-circle-xmark"></i> Đã hủy</span>
+                            </td>
+                            <td class="text-center">
+                                <a th:href="@{/admin/orders/view/{id}(id=${order.id})}" class="btn btn-outline-primary btn-sm">
+                                    <i class="fa-solid :fa-eye"></i> Chi tiết
+                                </a>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(orders)}">
+                            <td colspan="6" class="text-center text-muted py-4">Không tìm thấy đơn hàng nào khớp điều kiện lọc.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

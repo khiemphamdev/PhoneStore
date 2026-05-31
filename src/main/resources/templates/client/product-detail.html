@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${product.name} + ' - Chi Tiết Sản Phẩm'"></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #f8f9fa; }
+        .img-detail-box {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+        .img-detail-box img {
+            max-height: 380px;
+            object-fit: contain;
+            transition: transform 0.3s;
+        }
+        .img-detail-box img:hover {
+            transform: scale(1.03);
+        }
+        .related-card {
+            transition: transform 0.2s;
+            border: none;
+        }
+        .related-card:hover { transform: translateY(-4px); }
+        .desc-text {
+            white-space: pre-line; /* Giữ lại các dấu xuống dòng khi admin nhập từ form */
+        }
+        .desc-text {
+    column-count: 2;
+    column-gap: 30px;
+}
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm py-3 mb-4">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-primary" th:href="@{/}">
+                <i class="fa-solid :fa-mobile-screen-button"></i> PHONE<span class="text-white">STORE</span>
+            </a>
+            <a th:href="@{/}" class="btn btn-outline-light btn-sm"><i class="fa-solid :fa-house"></i> Quay lại trang chủ</a>
+        </div>
+    </nav>
+
+    <div class="container mb-5">
+        <div class="row g-4">
+            
+            <div class="col-lg-5">
+                <div class="img-detail-box text-center border">
+                    <img th:src="${product.image != null && product.image != ''} ? ${product.image} : 'https://placehold.co/350x350?text=No+Image'" 
+                         class="img-fluid rounded" alt="Phone Image">
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <div class="bg-white p-4 rounded-3 shadow-sm border h-100">
+                    
+                    <span class="badge bg-primary px-3 py-2 rounded-pill mb-2" 
+                          th:text="${product.category != null} ? ${product.category.name} : 'Điện thoại'">Hãng</span>
+                    
+                    <h2 class="fw-bold text-dark mb-3" th:text="${product.name}">Tên điện thoại</h2>
+                    
+                    <div class="p-3 bg-light rounded-3 mb-4">
+                        <span class="text-muted small fw-semibold">Giá bán ưu đãi:</span><br>
+                        <span class="text-danger fw-bold fs-2" 
+                              th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' đ'">0 đ</span>
+                    </div>
+
+                    <div class="row g-3 mb-4 text-secondary small">
+                        <div class="col-6">
+                            <i class="fa-solid :fa-box text-success me-1"></i> Tình trạng: 
+                            <strong class="text-success" th:if="${product.inventory > 0}">Còn hàng</strong>
+                            <strong class="text-danger" th:if="${product.inventory <= 0}">Hết hàng tạm thời</strong>
+                        </div>
+                        <div class="col-6">
+                            <i class="fa-solid :fa-warehouse text-primary me-1"></i> Sẵn có tại kho: 
+                            <strong class="text-dark" th:text="${product.inventory}">0</strong> máy
+                        </div>
+                    </div>
+
+                    <form action="/cart/add" method="post" class="row g-3 align-items-center mb-4 pt-3 border-top" th:if="${product.inventory > 0}">
+                        <input type="hidden" name="productId" th:value="${product.id}">
+                        
+                        <div class="col-auto">
+                            <label for="quantity" class="fw-bold small text-muted d-block mb-1">Số lượng mua:</label>
+                            <input type="number" id="quantity" name="quantity" class="form-control text-center" 
+                                   value="1" min="1" th:max="${product.inventory}" style="width: 90px; font-weight: bold;">
+                        </div>
+                        <div class="col">
+                            <label class="d-block mb-1 d-none d-sm-block">&nbsp;</label>
+                            <button type="submit" class="btn btn-primary fw-bold py-2 px-4 w-100 shadow-sm text-uppercase">
+                                <i class="fa-solid :fa-cart-shopping me-1"></i> Thêm Vào Giỏ Hàng
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="pt-3 border-top">
+                        <h6 class="fw-bold text-dark mb-2">
+                            <i class="fa-solid :fa-screwdriver-wrench text-primary me-1"></i> Thông số kỹ thuật & Mô tả máy:
+                        </h6>
+                        <p class="text-muted lh-lg desc-text"
+   th:text="${product.description}">
+</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-5 pt-4 border-top">
+            <h4 class="fw-bold text-dark mb-4"><i class="fa-solid :fa-fire text-danger me-1"></i> Sản phẩm cùng hãng có thể bạn quan tâm</h4>
+            
+            <div class="row row-cols-2 row-cols-md-4 g-4">
+                <div class="col" th:each="rProd : ${relatedProducts}">
+                    <div class="card h-100 shadow-sm related-card bg-white p-2">
+                        <div class="text-center p-2" style="height: 150px; display: flex; align-items: center; justify-content: center;">
+                            <img th:src="${rProd.image != null && rProd.image != ''} ? ${rProd.image} : 'https://placehold.co/150x150?text=Phone'" 
+                                 class="img-fluid rounded h-100" style="object-fit: contain;">
+                        </div>
+                        <div class="card-body p-2 d-flex flex-column">
+                            <h6 class="card-title fw-bold text-dark text-truncate mb-1" th:text="${rProd.name}" th:title="${rProd.name}">Tên máy</h6>
+                            <span class="text-danger fw-bold mt-auto small" 
+                                  th:text="${#numbers.formatDecimal(rProd.price, 0, 'COMMA', 0, 'POINT')} + ' đ'">0 đ</span>
+                            <a th:href="@{/product/detail/{id}(id=${rProd.id})}" class="btn btn-outline-primary btn-sm w-100 mt-2 py-1 fw-bold">Xem chi tiết</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div th:if="${#lists.isEmpty(relatedProducts)}" class="text-muted text-center py-4 bg-white border rounded-3 mt-2 small">
+                Chưa có sản phẩm điện thoại tương tự nào khác thuộc hãng này.
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
