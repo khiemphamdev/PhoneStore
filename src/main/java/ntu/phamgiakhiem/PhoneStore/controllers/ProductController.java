@@ -1,5 +1,7 @@
 package ntu.phamgiakhiem.PhoneStore.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -23,9 +25,24 @@ public class ProductController {
     private CategoryService categoryService;
 
     // 1. Hiển thị danh sách tất cả điện thoại
+ // Thay thế hàm listProducts cũ bằng hàm mới này:
     @GetMapping
-    public String listProducts(Model model) {
-        model.addAttribute("products", productService.getAllProducts());
+    public String listProducts(
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(value = "categoryId", required = false) Integer categoryId,
+            Model model) {
+        
+        // 1. Gọi hàm search thông minh từ Service
+        List<Product> products = productService.searchProducts(keyword, categoryId);
+        model.addAttribute("products", products);
+        
+        // 2. Vẫn cần nạp danh sách Categories để hiển thị lên thanh chọn (Dropdown select) bộ lọc
+        model.addAttribute("categories", categoryService.getAllCategories());
+        
+        // 3. Gửi lại từ khóa và id đã chọn về giao diện để giữ trạng thái hiển thị trên ô nhập liệu
+        model.addAttribute("selectedKeyword", keyword);
+        model.addAttribute("selectedCategoryId", categoryId);
+        
         return "admin/product/list";
     }
 

@@ -81,4 +81,24 @@ public class ProductService {
             throw new RuntimeException("Sản phẩm không tồn tại để xóa.");
         }
     }
+
+    public List<Product> searchProducts(String keyword, Integer categoryId) {
+        // Trường hợp 1: Có cả từ khóa tên và có chọn danh mục hãng
+        if (keyword != null && !keyword.trim().isEmpty() && categoryId != null) {
+            return productRepository.findByNameContainingIgnoreCaseAndCategoryId(keyword.trim(), categoryId);
+        }
+        
+        // Trường hợp 2: Chỉ tìm theo từ khóa tên điện thoại
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            return productRepository.findByNameContainingIgnoreCase(keyword.trim());
+        }
+        
+        // Trường hợp 3: Chỉ lọc theo danh mục hãng
+        if (categoryId != null) {
+            return productRepository.findByCategoryId(categoryId);
+        }
+        
+        // Trường hợp 4: Không nhập gì cả -> Trả về tất cả sản phẩm
+        return productRepository.findAll();
+    }
 }

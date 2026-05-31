@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout}">
+<head>
+    <title th:text="${pageTitle}">Thao Tác Sản Phẩm</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0" th:text="${pageTitle}">Tiêu đề Form</h5>
+                </div>
+                <div class="card-body">
+                    
+                    <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                        <i class="fa-solid :fa-triangle-exclamation"></i> <span th:text="${errorMessage}"></span>
+                    </div>
+
+                    <form th:action="@{/admin/products/save}" th:object="${product}" method="post">
+                        <input type="hidden" th:field="*{id}" />
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="productName" class="form-label fw-bold">Tên điện thoại:</label>
+                                    <input type="text" id="productName" th:field="*{name}" class="form-control" placeholder="Ví dụ: iPhone 15 Pro Max" required />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="category" class="form-label fw-bold">Hãng sản xuất (Danh mục):</label>
+                                    <select id="category" th:field="*{category}" class="form-select" required>
+                                        <option value="">-- Chọn hãng điện thoại --</option>
+                                        <option th:each="cat : ${categories}" 
+                                                th:value="${cat.id}" 
+                                                th:text="${cat.name}">Apple</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="price" class="form-label fw-bold">Giá bán (VND):</label>
+                                    <input type="number" id="price" th:field="*{price}" class="form-control" min="0" placeholder="Nhập giá tiền số thuần (Ví dụ: 25000000)" required />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="inventory" class="form-label fw-bold">Số lượng trong kho:</label>
+                                    <input type="number" id="inventory" th:field="*{inventory}" class="form-control" min="0" placeholder="Nhập số lượng nhập kho" required />
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="image" class="form-label fw-bold">Đường dẫn ảnh sản phẩm (URL):</label>
+                                    <input type="text" id="image" th:field="*{image}" class="form-control" placeholder="Nhúng link ảnh online (https://...)" />
+                                    <div class="form-text small">Tạm thời sử dụng link ảnh trực tuyến để đơn giản hóa hệ thống.</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="description" class="form-label fw-bold">Mô tả thông số chi tiết:</label>
+                                    <textarea id="description" th:field="*{description}" class="form-control" rows="5" placeholder="Cấu hình Chip, Ram, Dung lượng Pin..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <div class="d-flex justify-content-between pt-2">
+                            <a th:href="@{/admin/products}" class="btn btn-secondary">
+                                <i class="fa-solid :fa-arrow-left"></i> Quay lại danh sách
+                            </a>
+                            <button type="submit" class="btn btn-success px-5">
+                                <i class="fa-solid :fa-floppy-disk"></i> Lưu dữ liệu sản phẩm
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

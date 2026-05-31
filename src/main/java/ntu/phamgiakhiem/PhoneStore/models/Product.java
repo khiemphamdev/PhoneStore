@@ -41,6 +41,10 @@ public class Product {
 		this.category = category;
 	}
 
+	public Product() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public Integer getId() {
 		return id;
 	}
