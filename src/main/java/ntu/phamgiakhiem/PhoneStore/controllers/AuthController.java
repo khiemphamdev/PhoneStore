@@ -25,7 +25,7 @@ public class AuthController {
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         model.addAttribute("user", new UserRegistrationDTO());
-        return "register";
+        return "/auth/register";
     }
 
     @PostMapping("/register")
@@ -35,7 +35,7 @@ public class AuthController {
             return "redirect:/login?registered";
         } catch (RuntimeException e) {
             model.addAttribute("error", e.getMessage());
-            return "register";
+            return "/auth/register";
         }
     }
 }
