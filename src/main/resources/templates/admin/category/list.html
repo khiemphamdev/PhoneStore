@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout}"> <head>
+    <title>Danh Sách Danh Mục</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="fa-solid :fa-list"></i> Danh Sách Danh Mục Hãng</h5>
+            <a th:href="@{/admin/categories/new}" class="btn btn-light btn-sm fw-bold">
+                <i class="fa-solid :fa-plus"></i> Thêm Hãng Mới
+            </a>
+        </div>
+        <div class="card-body">
+            
+            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fa-solid :fa-circle-check"></i> <span th:text="${successMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fa-solid :fa-circle-exclamation"></i> <span th:text="${errorMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover align-middle mb-0">
+                    <thead class="table-dark text-center">
+                        <tr>
+                            <th style="width: 15%;">Mã ID</th>
+                            <th>Tên Hãng Điện Thoại</th>
+                            <th style="width: 25%;">Hành Động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="cat : ${categories}">
+                            <td class="text-center fw-bold" th:text="${cat.id}">1</td>
+                            <td th:text="${cat.name}">Apple</td>
+                            <td class="text-center">
+                                <a th:href="@{/admin/categories/edit/{id}(id=${cat.id})}" class="btn btn-warning btn-sm me-2">
+                                    <i class="fa-solid :fa-pen-to-square"></i> Sửa
+                                </a>
+                                <a th:href="@{/admin/categories/delete/{id}(id=${cat.id})}" 
+                                   class="btn btn-danger btn-sm" 
+                                   onclick="return confirm('Bạn có chắc chắn muốn xóa hãng này?')">
+                                    <i class="fa-solid :fa-trash"></i> Xóa
+                                </a>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(categories)}">
+                            <td colspan="3" class="text-center text-muted py-4">Chưa có danh mục nào.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

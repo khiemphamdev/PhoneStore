@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout}">
+<head>
+    <title th:text="${pageTitle}">Thao Tác Danh Mục</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="row justify-content-center">
+        <div class="col-md-8"> <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0" th:text="${pageTitle}">Tiêu đề Form</h5>
+                </div>
+                <div class="card-body">
+                    
+                    <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                        <i class="fa-solid :fa-triangle-exclamation"></i> <span th:text="${errorMessage}"></span>
+                    </div>
+
+                    <form th:action="@{/admin/categories/save}" th:object="${category}" method="post">
+                        <input type="hidden" th:field="*{id}" />
+
+                        <div class="mb-3">
+                            <label for="categoryName" class="form-label fw-bold">Tên hãng điện thoại:</label>
+                            <input type="text" id="categoryName" th:field="*{name}" class="form-control" placeholder="Nhập tên hãng..." required />
+                        </div>
+
+                        <div class="d-flex justify-content-between pt-2">
+                            <a th:href="@{/admin/categories}" class="btn btn-secondary">
+                                <i class="fa-solid :fa-arrow-left"></i> Quay lại
+                            </a>
+                            <button type="submit" class="btn btn-success px-4">
+                                <i class="fa-solid :fa-floppy-disk"></i> Lưu Lại
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
