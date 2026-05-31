@@ -41,4 +41,6 @@ public class HomeController {
         
         return "client/index"; // Trả về file giao diện khách hàng: templates/client/index.html
     }
+    
+    
 }

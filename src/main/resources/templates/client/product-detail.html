@@ -43,8 +43,29 @@
             <a class="navbar-brand fw-bold text-primary" th:href="@{/}">
                 <i class="fa-solid :fa-mobile-screen-button"></i> PHONE<span class="text-white">STORE</span>
             </a>
-            <a th:href="@{/}" class="btn btn-outline-light btn-sm"><i class="fa-solid :fa-house"></i> Quay lại trang chủ</a>
+            
+              <form th:action="@{/}" method="get" class="d-flex mx-auto w-50 my-2 my-lg-0">
+                <input type="hidden" name="categoryId" th:value="${selectedCategoryId}">
+                <div class="input-group w-100">
+                    <input class="form-control border-0 bg-light" type="search" name="keyword" 
+                           th:value="${selectedKeyword}" placeholder="Bạn tìm điện thoại gì hôm nay?..." aria-label="Search">
+                    <button class="btn btn-primary px-4" type="submit">
+                        <i class="fa-solid :fa-magnifying-glass"></i>
+                    </button>
+                </div>
+            </form>
+
+            <div class="navbar-nav ms-auto align-items-center gap-3">
+                <a class="nav-link text-white position-relative" href="/cart">
+                    <i class="fa-solid :fa-basket-shopping fs-5 me-1"></i> Giỏ hàng
+                </a>
+                <a class="btn btn-sm btn-outline-secondary text-white border-secondary px-3" href="/admin/dashboard">
+                    <i class="fa-solid :fa-user-shield me-1"></i> Quản trị
+                </a>
+            </div>
+           
         </div>
+        
     </nav>
 
     <div class="container mb-5">
@@ -83,7 +104,7 @@
                         </div>
                     </div>
 
-                    <form action="/cart/add" method="post" class="row g-3 align-items-center mb-4 pt-3 border-top" th:if="${product.inventory > 0}">
+                    <form class="row g-3 align-items-center mb-4 pt-3 border-top" th:if="${product.inventory > 0}">
                         <input type="hidden" name="productId" th:value="${product.id}">
                         
                         <div class="col-auto">
@@ -93,9 +114,10 @@
                         </div>
                         <div class="col">
                             <label class="d-block mb-1 d-none d-sm-block">&nbsp;</label>
-                            <button type="submit" class="btn btn-primary fw-bold py-2 px-4 w-100 shadow-sm text-uppercase">
-                                <i class="fa-solid :fa-cart-shopping me-1"></i> Thêm Vào Giỏ Hàng
-                            </button>
+                           <button class="btn btn-primary add-to-cart"
+        						th:attr="data-id=${product.id}">
+    							Thêm vào giỏ
+							</button>
                         </div>
                     </form>
 
@@ -137,6 +159,48 @@
             </div>
         </div>
     </div>
+    <div id="toast" 
+     style="display:none;
+            position:fixed;
+            top:20px;
+            right:20px;
+            background:#28a745;
+            color:white;
+            padding:12px 18px;
+            border-radius:8px;
+            z-index:9999;
+            font-weight:bold;
+            box-shadow:0 4px 10px rgba(0,0,0,0.2);">
+    Đã thêm vào giỏ hàng!
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function () {
+
+    $(".add-to-cart").click(function () {
+
+        let productId = $(this).data("id");
+
+        $.ajax({
+            type: "POST",
+            url: "/cart/add",
+            data: {
+                productId: productId,
+                quantity: 1
+            },
+            success: function (response) {
+                alert("Đã thêm vào giỏ hàng!");
+            },
+            error: function (xhr) {
+                alert("Lỗi: " + xhr.responseText);
+            }
+        });
+
+    });
+
+});
+
+</script>
 
 </body>
 </html>
