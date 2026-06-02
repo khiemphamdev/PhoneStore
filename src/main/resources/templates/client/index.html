@@ -114,7 +114,7 @@
     <div class="container mb-5">
         
         <div class="mb-4">
-            <h5 class="fw-bold text-dark mb-3"><i class="fa-solid :fa-layer-group text-primary me-1"></i> Chọn Theo Hãng Sản Xuất</h5>
+          
             <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-3">
                 <div class="col">
                     <a th:href="@{/}" 
@@ -137,10 +137,7 @@
         
 
         <div>
-            <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
-                <h4 class="fw-bold text-dark mb-0">Danh Sách Sản Phẩm</h4>
-                <span class="badge bg-secondary px-3 py-2 rounded-pill" th:text="'Tìm thấy: ' + ${products.size()} + ' máy'">0 máy</span>
-            </div>
+         
 
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
                 <div class="col" th:each="product : ${products}">
