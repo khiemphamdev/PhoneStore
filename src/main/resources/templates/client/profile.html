@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Cá Nhân - PhoneStore</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #f8f9fa; }
+        .profile-nav .nav-link {
+            color: #495057;
+            font-weight: 500;
+            padding: 12px 15px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        .profile-nav .nav-link:hover {
+            background-color: #e9ecef;
+            color: #0d6efd;
+        }
+        .profile-nav .nav-link.active {
+            background-color: #0d6efd;
+            color: #ffffff;
+        }
+        .avatar-placeholder {
+            width: 100px;
+            height: 100px;
+            background-color: #e9ecef;
+            color: #6c757d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            border-radius: 50%;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm py-3 mb-4">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-primary" th:href="@{/}">
+                <i class="fa-solid :fa-mobile-screen-button"></i> PHONE STORE
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a th:href="@{/}" class="btn btn-outline-light btn-sm"><i class="fa-solid :fa-house"></i> Quay lại mua sắm</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mb-5">
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+            <i class="fa-solid :fa-circle-check"></i> <span th:text="${successMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+            <i class="fa-solid :fa-circle-exclamation"></i> <span th:text="${errorMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div class="row g-4">
+            
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm rounded-3 text-center p-4 bg-white mb-4">
+                    <div class="avatar-placeholder mb-3 border border-2 border-primary">
+                        <i class="fa-solid :fa-user"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark mb-1" th:text="${user.fullname != null && user.fullname != ''} ? ${user.fullname} : ${user.username}">Tên Người Dùng</h5>
+                    <p class="text-muted small mb-3" th:text="'@' + ${user.username}">@username</p>
+                    <span class="badge bg-light text-success border border-success-subtle px-3 py-2 rounded-pill small fw-bold">Tài khoản Client</span>
+                    
+                    <hr class="my-4 text-muted">
+                    
+                    <div class="nav flex-column nav-pills profile-nav gap-2" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                        <button class="nav-link text-start active" id="profile-info-tab" data-bs-toggle="pill" data-bs-target="#profile-info" type="button" role="tab" aria-controls="profile-info" aria-selected="true">
+                            <i class="fa-solid :fa-id-card me-2"></i> Thông tin tài khoản
+                        </button>
+                        <button class="nav-link text-start" id="profile-orders-tab" data-bs-toggle="pill" data-bs-target="#profile-orders" type="button" role="tab" aria-controls="profile-orders" aria-selected="false">
+                            <i class="fa-solid :fa-clock-history me-2"></i> Lịch sử mua hàng
+                        </button>
+                        <a href="/logout" class="nav-link text-start text-danger mt-3 border-top pt-3 rounded-0" onclick="return confirm('Bạn muốn đăng xuất khỏi hệ thống?')">
+                            <i class="fa-solid :fa-right-from-bracket me-2"></i> Đăng xuất
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="tab-content" id="v-pills-tabContent">
+                    
+                    <div class="tab-pane fade show active" id="profile-info" role="tabpanel" aria-labelledby="profile-info-tab">
+                        <div class="card border-0 shadow-sm rounded-3 p-4 bg-white">
+                            <h4 class="fw-bold text-dark mb-4 border-bottom pb-2"><i class="fa-solid :fa-user-gear text-primary me-1"></i> Hồ Sơ Cá Nhân</h4>
+                            
+                            <form th:action="@{/profile/update}" method="post">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="username" class="form-label small fw-bold text-muted">Tên đăng nhập (Không thể sửa):</label>
+                                        <input type="text" id="username" class="form-control bg-light fw-semibold text-secondary" th:value="${user.username}" readonly>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="fullname" class="form-label small fw-bold text-muted">Họ và tên của bạn:</label>
+                                        <input type="text" id="fullname" name="fullname" class="form-control" th:value="${user.fullname}" placeholder="Nhập họ tên đầy đủ..." required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="email" class="form-label small fw-bold text-muted">Địa chỉ Email:</label>
+                                        <input type="email" id="email" name="email" class="form-control" th:value="${user.email}" placeholder="example@mail.com">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="phone" class="form-label small fw-bold text-muted">Số điện thoại liên hệ:</label>
+                                        <input type="tel" id="phone" name="phone" class="form-control" th:value="${user.phone}" placeholder="Nhập số điện thoại nhận hàng...">
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="address" class="form-label small fw-bold text-muted">Địa chỉ giao hàng mặc định:</label>
+                                        <textarea id="address" name="address" class="form-control" rows="3" placeholder="Nhập địa chỉ nhà chi tiết để nhận máy nhanh hơn..." th:text="${user.address}"></textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-4 pt-2 text-end">
+                                    <button type="submit" class="btn btn-primary px-4 fw-bold">
+                                        <i class="fa-solid :fa-floppy-disk me-1"></i> Lưu Thay Đổi
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="profile-orders" role="tabpanel" aria-labelledby="profile-orders-tab">
+                        <div class="card border-0 shadow-sm rounded-3 p-4 bg-white">
+                            <h4 class="fw-bold text-dark mb-4 border-bottom pb-2"><i class="fa-solid :fa-clock-history text-primary me-1"></i> Lịch Sử Đơn Hàng</h4>
+                            
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle mb-0 small">
+                                    <thead class="table-light text-secondary text-uppercase">
+                                        <tr>
+                                            <th scope="col" class="text-center">Mã đơn</th>
+                                            <th scope="col">Ngày mua</th>
+                                            <th scope="col" class="text-end">Tổng tiền</th>
+                                            <th scope="col" class="text-center">Trạng thái</th>
+                                            <th scope="col" class="text-center">Hành động</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="order : ${orders}">
+                                            <td class="text-center fw-bold text-primary" th:text="'#' + ${order.id}">#1001</td>
+                                            <td th:text="${#temporals.format(order.createdDate, 'dd/MM/yyyy HH:mm')}">01/01/2026 10:00</td>
+                                            <td class="text-end fw-bold text-danger" 
+                                                th:text="${#numbers.formatDecimal(order.totalPrice, 0, 'COMMA', 0, 'POINT')} + ' đ'">0 đ</td>
+                                            <td class="text-center">
+                                                <span th:if="${order.status == 'PENDING'}" class="badge bg-warning text-dark">Chờ duyệt</span>
+                                                <span th:if="${order.status == 'CONFIRMED'}" class="badge bg-info text-dark">Đã duyệt</span>
+                                                <span th:if="${order.status == 'SHIPPING'}" class="badge bg-primary">Đang giao</span>
+                                                <span th:if="${order.status == 'DELIVERED'}" class="badge bg-success">Thành công</span>
+                                                <span th:if="${order.status == 'CANCELLED'}" class="badge bg-danger">Đã hủy</span>
+                                                
+                                            </td>
+                                            <td class="text-center align-middle">
+    <a th:href="@{/profile/detail/{id}(id=${order.id})}" class="btn btn-outline-primary btn-sm fw-bold">
+        <i class="fa-solid fa-eye"></i> Xem Chi Tiết
+    </a>
+</td>
+                                        </tr>
+                                        <tr th:if="${#lists.isEmpty(orders)}">
+                                            <td colspan="4" class="text-center text-muted py-4">Bạn chưa thực hiện đơn hàng nào trên hệ thống.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

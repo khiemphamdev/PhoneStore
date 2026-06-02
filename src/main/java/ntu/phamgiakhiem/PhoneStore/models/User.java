@@ -21,6 +21,16 @@ public class User {
     @Column(nullable = false)
     private boolean enabled = true;
 
+    @Column(length = 100)
+    private String fullname;
+
+
+    @Column(length = 20)
+    private String phone;
+
+    @Column(columnDefinition = "TEXT") // Để lưu địa chỉ dài thoải mái
+    private String address;
+    
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "user_roles",
@@ -82,6 +92,42 @@ public class User {
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
+
+	public String getFullname() {
+		return fullname;
+	}
+
+	@Column(length = 100)
+	private String email;
+	
+	public void setFullname(String fullname) {
+		this.fullname = fullname;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
     
+	
     
 }

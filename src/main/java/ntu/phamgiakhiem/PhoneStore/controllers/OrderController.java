@@ -31,10 +31,13 @@ public class OrderController {
             // Cần bổ sung hàm findByStatus trong OrderService nếu muốn gọi trực tiếp,
             // hoặc tận dụng gọi từ Repository. Ở đây mặc định lấy hết hoặc bạn có thể tối ưu lọc.
             orders = orderService.getAllOrders().stream()
+            		.filter(o -> !o.getStatus().equalsIgnoreCase("CART"))
                     .filter(o -> o.getStatus().equalsIgnoreCase(status.trim()))
                     .toList();
         } else {
-            orders = orderService.getAllOrders();
+        	orders = orderService.getAllOrders().stream()
+                    .filter(o -> !o.getStatus().equalsIgnoreCase("CART"))
+                    .toList();
         }
 
         model.addAttribute("orders", orders);

@@ -28,6 +28,19 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+    
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private ProductSpecification specification;
+    
+    
+
+	public ProductSpecification getSpecification() {
+		return specification;
+	}
+
+	public void setSpecification(ProductSpecification specification) {
+		this.specification = specification;
+	}
 
 	public Product(Integer id, String name, Double price, String image, String description, Integer inventory,
 			Category category) {

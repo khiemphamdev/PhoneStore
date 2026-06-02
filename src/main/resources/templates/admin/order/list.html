@@ -21,7 +21,7 @@
                 <div class="col-md-4 col-6">
                     <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
                         <option value="ALL" th:selected="${selectedStatus == 'ALL'}">-- Tất cả đơn hàng --</option>
-                        <option value="CART" th:selected="${selectedStatus == 'CART'}">Giỏ hàng của khách (CART)</option>
+                       
                         <option value="PENDING" th:selected="${selectedStatus == 'PENDING'}">Chờ phê duyệt (PENDING)</option>
                         <option value="CONFIRMED" th:selected="${selectedStatus == 'CONFIRMED'}">Đã xác nhận (CONFIRMED)</option>
                         <option value="SHIPPING" th:selected="${selectedStatus == 'SHIPPING'}">Đang giao hàng (SHIPPING)</option>
@@ -63,7 +63,7 @@
                             <td class="text-end text-danger fw-bold" 
                                 th:text="${#numbers.formatDecimal(order.totalPrice, 0, 'COMMA', 0, 'POINT')} + ' đ'">0 đ</td>
                             <td class="text-center">
-                                <span th:if="${order.status == 'CART'}" class="badge bg-secondary">Giỏ hàng</span>
+                            
                                 <span th:if="${order.status == 'PENDING'}" class="badge bg-warning text-dark"><i class="fa-solid :fa-clock"></i> Chờ duyệt</span>
                                 <span th:if="${order.status == 'CONFIRMED'}" class="badge bg-info text-dark"><i class="fa-solid :fa-thumbs-up"></i> Đã xác nhận</span>
                                 <span th:if="${order.status == 'SHIPPING'}" class="badge bg-primary"><i class="fa-solid :fa-truck"></i> Đang giao</span>

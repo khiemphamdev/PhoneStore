@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Chi tiết đơn hàng #' + ${order.id}"></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .order-status-timeline {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .invoice-title {
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm py-3 mb-4">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-primary" th:href="@{/}">
+                <i class="fa-solid :fa-mobile-screen-button me-2"></i>PHONE STORE
+            </a>
+            <a href="/profile" class="btn btn-outline-light btn-sm">
+                <i class="fa-solid :fa-arrow-left me-1"></i> Quay lại lịch sử mua hàng
+            </a>
+        </div>
+    </nav>
+
+    <div class="container mb-5">
+        <div class="row g-4">
+            
+            <div class="col-lg-8">
+                
+                <div class="card border-0 shadow-sm rounded-3 p-4 bg-white mb-4">
+                    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center border-bottom pb-3 mb-4 gap-3">
+                        <div>
+                            <h4 class="fw-bold text-dark mb-1">
+                                Đơn Hàng <span th:text="'#' + ${order.id}" class="text-primary"></span>
+                            </h4>
+                            <small class="text-muted">
+                                Ngày đặt: <span th:text="${#temporals.format(order.createdDate, 'dd/MM/yyyy HH:mm')} ?: ${order.createdDate}">02/06/2026</span>
+                            </small>
+                        </div>
+                        <div>
+                            <span th:if="${order.status == 'PENDING'}" class="badge bg-warning text-dark px-3 py-2 fs-6 rounded-pill">Chờ duyệt đơn</span>
+                            <span th:if="${order.status == 'CONFIRMED'}" class="badge bg-info text-dark px-3 py-2 fs-6 rounded-pill">Đã xác nhận</span>
+                            <span th:if="${order.status == 'SHIPPING'}" class="badge bg-primary px-3 py-2 fs-6 rounded-pill">Đang giao hàng</span>
+                            <span th:if="${order.status == 'DELIVERED'}" class="badge bg-success px-3 py-2 fs-6 rounded-pill">Giao thành công</span>
+                            <span th:if="${order.status == 'CANCELLED'}" class="badge bg-danger px-3 py-2 fs-6 rounded-pill">Đã hủy đơn</span>
+                        </div>
+                    </div>
+
+                    <h5 class="fw-bold text-secondary small text-uppercase mb-3">Danh sách thiết bị đặt mua</h5>
+                    <div class="table-responsive">
+                        <table class="table align-middle table-borderless">
+                            <thead class="table-light text-secondary small">
+                                <tr>
+                                    <th scope="col" class="ps-3">Sản phẩm</th>
+                                    <th scope="col" class="text-center">Số lượng</th>
+                                    <th scope="col" class="text-end pe-3">Đơn giá</th>
+                                    <th scope="col" class="text-end pe-3">Thành tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="detail : ${orderDetails}" class="border-bottom">
+                                    <td class="ps-3 py-3">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <img th:src="${detail.product.image != null && detail.product.image != ''} ? ${detail.product.image} : 'https://placehold.co/60x60?text=Phone'" 
+                                                 class="img-thumbnail rounded" style="max-height: 60px; max-width: 60px; object-fit: contain;">
+                                            <div>
+                                                <h6 class="fw-bold mb-0 text-dark" th:text="${detail.product.name}">Tên iPhone / Samsung</h6>
+                                                <small class="text-muted" th:text="${detail.product.category != null} ? ${detail.product.category.name} : 'Chính hãng'">Hãng sản xuất</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-center fw-bold text-dark" th:text="'x' + ${detail.quantity}">x1</td>
+                                    <td class="text-end text-muted pe-3" 
+                                        th:text="${#numbers.formatDecimal(detail.price, 0, 'COMMA', 0, 'POINT')} + ' đ'">0 đ</td>
+                                    <td class="text-end fw-bold text-danger pe-3" 
+                                        th:text="${#numbers.formatDecimal(detail.price * detail.quantity, 0, 'COMMA', 0, 'POINT')} + ' đ'">0 đ</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                
+                <div class="card border-0 shadow-sm rounded-3 p-4 bg-white mb-4">
+                    <h5 class="fw-bold text-dark border-bottom pb-2 mb-3">
+                        <i class="fa-solid :fa-location-dot text-primary me-2"></i>Thông tin nhận hàng
+                    </h5>
+                    <div class="mb-3">
+                        <label class="text-muted small d-block mb-1">Người nhận máy:</label>
+                        <strong class="text-dark fs-6" th:text="${order.user.fullname ?: order.user.username}">Nguyễn Văn A</strong>
+                    </div>
+                    <div class="mb-3" th:if="${order.user.phone}">
+                        <label class="text-muted small d-block mb-1">Số điện thoại:</label>
+                        <strong class="text-dark" th:text="${order.user.phone}">09XXXXXXXX</strong>
+                    </div>
+                    <div class="mb-0">
+                        <label class="text-muted small d-block mb-1">Địa chỉ giao tới:</label>
+                        <strong class="text-dark lh-base fw-semibold" th:text="${order.shippingAddress}">Số nhà, Đường, Tỉnh Thành...</strong>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm rounded-3 p-4 bg-white">
+                    <h5 class="fw-bold text-dark border-bottom pb-2 mb-3">Tóm tắt thanh toán</h5>
+                    
+                    <div class="d-flex justify-content-between mb-2 small text-muted">
+                        <span>Tổng tiền hàng số lượng thực:</span>
+                        <span th:text="${#numbers.formatDecimal(order.totalPrice, 0, 'COMMA', 0, 'POINT')} + ' đ'">0 đ</span>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mb-3 small text-muted">
+                        <span>Phí vận chuyển (Giao nhanh):</span>
+                        <span class="text-success fw-bold">Miễn phí (Freeship)</span>
+                    </div>
+                    
+                    <hr class="text-muted">
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-bold text-dark">Tổng tiền phải trả:</span>
+                        <span class="fs-4 fw-bold text-danger" 
+                              th:text="${#numbers.formatDecimal(order.totalPrice, 0, 'COMMA', 0, 'POINT')} + ' đ'">0 đ</span>
+                    </div>
+                    
+                    <div class="mt-3 p-2 bg-light rounded text-center small text-secondary border">
+                        <i class="fa-solid :fa-wallet me-1"></i> Phương thức: Thanh toán khi nhận hàng (COD)
+                    </div>
+                </div>
+                
+            </div>
+            
+            
+            <div th:if="${order.status == 'DELIVERED'}" class="card border-0 shadow-sm rounded-3 p-4 bg-white mt-4">
+    <h5 class="fw-bold text-success mb-3 border-bottom pb-2">
+        <i class="fa-solid :fa-star-half-stroke"></i> Đánh giá sản phẩm đã mua
+    </h5>
+    <p class="text-muted small mb-4">Đơn hàng của bạn đã được giao thành công. Hãy chia sẻ cảm nhận của bạn về sản phẩm nhé!</p>
+
+    <div th:each="detail, iterStat : ${orderDetails}" class="p-3 bg-light rounded-3 mb-3 border">
+        
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3">
+            <div class="d-flex align-items-center gap-3">
+                <img th:src="${detail.product.image != null && detail.product.image != ''} ? ${detail.product.image} : 'https://placehold.co/50x50?text=Phone'" 
+                     class="img-thumbnail rounded" style="max-height: 50px; max-width: 50px; object-fit: contain;">
+                <div>
+                    <h6 class="fw-bold mb-0 text-dark" th:text="${detail.product.name}">Tên điện thoại</h6>
+                    <small class="text-muted" th:text="${detail.product.category?.name}">Hãng</small>
+                </div>
+            </div>
+            
+            <div>
+                <div>
+    <button th:if="${!reviewRepo.existsByUserIdAndProductId(order.user.id, detail.product.id)}"
+            class="btn btn-outline-success btn-sm fw-bold px-3" 
+            type="button" 
+            data-bs-toggle="collapse" 
+            th:data-bs-target="'#collapseReviewForm-' + ${iterStat.index}">
+        <i class="fa-solid :fa-pen-to-square me-1"></i> Viết đánh giá
+    </button>
+
+    <span th:if="${reviewRepo.existsByUserIdAndProductId(order.user.id, detail.product.id)}" 
+          class="badge bg-secondary text-white px-3 py-2 rounded-pill fs-7">
+        <i class="fa-solid :fa-circle-check me-1 text-light"></i> Bạn đã đánh giá sản phẩm này
+    </span>
+</div>
+            </div>
+        </div>
+
+        <div class="collapse" th:id="'collapseReviewForm-' + ${iterStat.index}">
+            <div class="card card-body border-0 bg-white p-3 mt-3 shadow-sm rounded-3">
+                
+                <form th:action="@{/reviews/add}" method="post">
+                    <input type="hidden" name="productId" th:value="${detail.product.id}">
+                    <input type="hidden" name="orderId" th:value="${order.id}">
+                    
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label small fw-bold text-secondary mb-1">Mức độ hài lòng:</label>
+                            <select name="rating" class="form-select form-select-sm text-warning fw-bold" required>
+                                <option value="5">⭐⭐⭐⭐⭐ 5 Sao (Tuyệt vời)</option>
+                                <option value="4">⭐⭐⭐⭐ 4 Sao (Rất tốt)</option>
+                                <option value="3">⭐⭐⭐ 3 Sao (Bình thường)</option>
+                                <option value="2">⭐⭐ 2 Sao (Tạm được)</option>
+                                <option value="1">⭐ 1 Sao (Rất tệ)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-8">
+                            <label class="form-label small fw-bold text-secondary mb-1">Nội dung nhận xét:</label>
+                            <textarea name="content" class="form-control form-control-sm" rows="2" placeholder="Sản phẩm dùng mượt, pin trâu, giao hàng nhanh..." required></textarea>
+                        </div>
+                        
+                        <div class="col-12 text-end">
+                            <button type="submit" class="btn btn-success btn-sm px-4 fw-bold">
+                                <i class="fa-solid :fa-paper-plane me-1"></i> Gửi đánh giá ngay
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                
+            </div>
+        </div>
+        
+    </div>
+</div>
+            
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

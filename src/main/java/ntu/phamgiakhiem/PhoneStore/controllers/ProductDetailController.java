@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import ntu.phamgiakhiem.PhoneStore.models.Product;
+import ntu.phamgiakhiem.PhoneStore.models.Review;
+import ntu.phamgiakhiem.PhoneStore.repositories.ReviewRepository;
 import ntu.phamgiakhiem.PhoneStore.services.ProductService;
 
 import java.util.List;
@@ -17,6 +19,9 @@ public class ProductDetailController {
 
     @Autowired
     private ProductService productService;
+    
+    @Autowired
+    private ReviewRepository reviewRepository;
 
     // Xem chi tiết điện thoại theo mã ID ngoài trang chủ
     @GetMapping("/product/detail/{id}")
@@ -33,6 +38,8 @@ public class ProductDetailController {
                     .limit(4)
                     .toList();
 
+            List<Review> reviews = reviewRepository.findByProductIdOrderByCreatedDateDesc(id);
+            model.addAttribute("reviews", reviews);
             model.addAttribute("product", product);
             model.addAttribute("relatedProducts", relatedProducts);
             

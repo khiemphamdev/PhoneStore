@@ -59,9 +59,9 @@
                 <a class="nav-link text-white position-relative" href="/cart">
                     <i class="fa-solid :fa-basket-shopping fs-5 me-1"></i> Giỏ hàng
                 </a>
-                <a class="btn btn-sm btn-outline-secondary text-white border-secondary px-3" href="/admin/dashboard">
-                    <i class="fa-solid :fa-user-shield me-1"></i> Quản trị
-                </a>
+                 <a class="btn btn-sm btn-outline-secondary text-white border-secondary px-3" th:href="@{/profile}">
+   					 <i class="fa-solid :fa-user me-1"></i> Tài khoản
+				</a>
             </div>
            
         </div>
@@ -121,16 +121,7 @@
                         </div>
                     </form>
 
-                    <div class="pt-3 border-top">
-                        <h6 class="fw-bold text-dark mb-2">
-                            <i class="fa-solid :fa-screwdriver-wrench text-primary me-1"></i> Thông số kỹ thuật & Mô tả máy:
-                        </h6>
-                        <p class="text-muted lh-lg desc-text"
-   th:text="${product.description}">
-</p>
-                    </div>
-
-                </div>
+               
             </div>
         </div>
 
@@ -157,6 +148,61 @@
             <div th:if="${#lists.isEmpty(relatedProducts)}" class="text-muted text-center py-4 bg-white border rounded-3 mt-2 small">
                 Chưa có sản phẩm điện thoại tương tự nào khác thuộc hãng này.
             </div>
+            
+            <div class="container mt-5 mb-5">
+    <div class="card border-0 shadow-sm rounded-3 bg-white p-4">
+        
+        <h4 class="fw-bold text-dark mb-4 border-bottom pb-3">
+            <i class="fa-solid :fa-comments text-warning me-2"></i>
+            Khách hàng nhận xét (<span th:text="${reviews.size()}">0</span>)
+        </h4>
+
+        <div th:if="${reviews.isEmpty()}" class="text-center py-5 bg-light rounded-3 border border-dashed">
+            <i class="fa-regular :fa-star-half-stroke text-muted fs-1 mb-3 d-block"></i>
+            <p class="text-secondary mb-0 fw-semibold">Sản phẩm này chưa có đánh giá nào.</p>
+            <small class="text-muted">Hãy mua hàng và trở thành người đầu tiên chia sẻ cảm nhận!</small>
+        </div>
+
+        <div th:unless="${reviews.isEmpty()}" class="review-list">
+            <div th:each="rev : ${reviews}" class="pb-3 pt-3 border-bottom">
+                
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold small shadow-sm" 
+                             style="width: 32px; height: 32px;"
+                             th:text="${#strings.substring(rev.user.fullname ?: rev.user.username, 0, 1).toUpperCase()}">
+                            U
+                        </div>
+                        <strong class="text-dark small" th:text="${rev.user.fullname ?: rev.user.username}">Người dùng</strong>
+                        <span class="badge bg-light text-success border border-success-subtle rounded-pill small" style="font-size: 0.75rem;">
+                            <i class="fa-solid :fa-circle-check"></i> Đã mua hàng
+                        </span>
+                    </div>
+                    
+                    <small class="text-muted small">
+                        <i class="fa-regular :fa-clock me-1"></i>
+                        <span th:text="${#temporals.format(rev.createdDate, 'dd/MM/yyyy HH:mm')}">02/06/2026 15:00</span>
+                    </small>
+                </div>
+
+                <div class="text-warning small mb-2 fs-6">
+                    <span th:each="i : ${#numbers.sequence(1, rev.rating)}">★</span>
+                    <span th:if="${rev.rating < 5}" th:each="i : ${#numbers.sequence(1, 5 - rev.rating)}" class="text-muted opacity-25">★</span>
+                </div>
+
+                <p class="text-secondary mb-0 lh-base bg-light p-3 rounded-3 border-0" 
+                   style="font-size: 0.95rem; text-indent: 4px;" 
+                   th:text="${rev.content}">
+                    Sản phẩm dùng rất tốt, mượt mà đáng đồng tiền bát gạo!
+                </p>
+                
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
         </div>
     </div>
     <div id="toast" 
@@ -181,12 +227,13 @@ $(document).ready(function () {
 
         let productId = $(this).data("id");
 
+        let quantity = $("#quantity").val();
         $.ajax({
             type: "POST",
             url: "/cart/add",
             data: {
                 productId: productId,
-                quantity: 1
+                quantity: quantity
             },
             success: function (response) {
                 alert("Đã thêm vào giỏ hàng!");
