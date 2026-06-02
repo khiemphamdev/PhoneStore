@@ -48,4 +48,6 @@ Hệ thống được phát triển trên nền tảng Java hiện đại kết 
 
 ### 1. Giao diện trang đăng ký, đăng nhập
 
+<img width="522" height="537" alt="Image" src="https://github.com/user-attachments/assets/ed7c0c32-7c52-4cea-a6ac-080e0dfbe80e" />
+
 ### 2. Giao diện trang chủ
