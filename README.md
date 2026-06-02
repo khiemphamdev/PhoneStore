@@ -45,7 +45,7 @@ Hệ thống được phát triển trên nền tảng Java hiện đại kết 
 ## 🖼️ KẾT QUẢ GIAO DIỆN HỆ THỐNG
 
 >
-I. Giao diện khách hàng
+## I. Giao diện khách hàng
 ### 1. Giao diện trang đăng ký, đăng nhập
 
 <img width="522" height="537" alt="Image" src="https://github.com/user-attachments/assets/ed7c0c32-7c52-4cea-a6ac-080e0dfbe80e" />
@@ -78,15 +78,21 @@ I. Giao diện khách hàng
 
 <img width="1368" height="621" alt="Image" src="https://github.com/user-attachments/assets/caf8ec15-37a3-4707-962d-877c2bc98b23" />
 
-II. Giao diện admin
+## II. Giao diện admin
 
 ### 1. Giao diện trang quản lý danh mục
+
 <img width="1897" height="681" alt="Image" src="https://github.com/user-attachments/assets/c211a86b-617f-495f-85cc-01bd9fd7e5d0" />
+
 ### 2. Giao diện trang quản lý điện thoại 
+
 <img width="1893" height="871" alt="Image" src="https://github.com/user-attachments/assets/3d4e3097-70e4-4062-8c20-a5353dcc6250" />
+
 ### 3. Giao diện trang quản lý đơn hàng
+
 <img width="1904" height="326" alt="Image" src="https://github.com/user-attachments/assets/daf6e8a4-ab9d-477d-ad58-a5edb6b30d7a" />
 
 ### 4. Giao diện trang chi tiết đơn hàng
+
 <img width="1629" height="800" alt="Image" src="https://github.com/user-attachments/assets/44d442ba-9153-4f42-858c-98df574ad593" />
 
