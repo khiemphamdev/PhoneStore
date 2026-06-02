@@ -6,11 +6,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import ntu.phamgiakhiem.PhoneStore.models.Category;
 import ntu.phamgiakhiem.PhoneStore.models.Product;
 import ntu.phamgiakhiem.PhoneStore.services.ProductService;
 import ntu.phamgiakhiem.PhoneStore.services.CategoryService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class HomeController {
@@ -33,7 +35,13 @@ public class HomeController {
         model.addAttribute("products", products);
         
         // 2. Lấy toàn bộ danh mục hãng để hiển thị làm Menu Lọc cho khách hàng
-        model.addAttribute("categories", categoryService.getAllCategories());
+        List<Category> top5Categories = categoryService.getAllCategories()
+                .stream()
+                .limit(5)
+                .collect(Collectors.toList());
+
+        model.addAttribute("categories", top5Categories);
+        
         
         // 3. Giữ lại trạng thái tìm kiếm trên thanh tìm kiếm của khách
         model.addAttribute("selectedKeyword", keyword);

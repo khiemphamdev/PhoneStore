@@ -146,12 +146,12 @@
                 <div class="col" th:each="product : ${products}">
                     <div class="card h-100 border-0 shadow-sm product-card bg-white">
                         
-                        <div class="product-img-container">
-                        <a th:href="@{/product/detail/{id}(id=${product.id})}">
-                            <img th:src="${product.image != null && product.image != ''} ? ${product.image} : 'https://placehold.co/220x220?text=Smartphone'" 
-                                 class="card-img-top img-fluid" alt="Phone Image">
-                           </a>
-                        </div>
+                       <div class="product-img-container" style="height: 220px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+    <a th:href="@{/product/detail/{id}(id=${product.id})}" class="w-100 h-100 d-flex align-items-center justify-content-center">
+        <img th:src="${product.image != null && product.image != ''} ? ${product.image} : 'https://placehold.co/220x220?text=Smartphone'" 
+             class="card-img-top img-fluid h-100 w-100 object-fit-contain" alt="Phone Image">
+    </a>
+</div>
                         
                         <div class="card-body d-flex flex-column pt-2">
                             <div class="mb-1">
@@ -190,6 +190,61 @@
 
         </div>
     </div>
+
+<footer class="bg-dark text-white pt-5 pb-3 border-top border-secondary mt-auto">
+    <div class="container">
+        <div class="row g-4">
+            
+            <div class="col-lg-4 col-md-6">
+                <h5 class="fw-bold text-warning mb-3">
+                    <i class="fa-solid :fa-mobile-screen-button me-2"></i>PHONE STORE
+                </h5>
+                <p class="text-secondary small lh-base mb-3">
+                    Hệ thống bán lẻ điện thoại di động chính hãng, cung cấp các dòng smartphone mới nhất từ Apple, Samsung, Xiaomi với mức giá cạnh tranh và chế độ bảo hành uy tín.
+                </p>
+                
+            </div>
+
+            <div class="col-lg-2 col-md-6">
+                <h6 class="fw-bold text-light mb-3">Sản phẩm hot</h6>
+                <ul class="list-unstyled small">
+                    <li class="mb-2"><a th:href="@{/products}" class="text-secondary text-decoration-none hover-link">iPhone Series</a></li>
+                    <li class="mb-2"><a th:href="@{/products}" class="text-secondary text-decoration-none hover-link">Samsung Galaxy</a></li>
+                    <li class="mb-2"><a th:href="@{/products}" class="text-secondary text-decoration-none hover-link">Xiaomi Redmi</a></li>
+                    <li class="mb-2"><a th:href="@{/products}" class="text-secondary text-decoration-none hover-link">Phụ kiện công nghệ</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <h6 class="fw-bold text-light mb-3">Chính sách khách hàng</h6>
+                <ul class="list-unstyled small">
+                    <li class="mb-2"><a href="#" class="text-secondary text-decoration-none hover-link">Chính sách bảo hành 1 đổi 1</a></li>
+                    <li class="mb-2"><a href="#" class="text-secondary text-decoration-none hover-link">Chính sách giao hàng tận nơi</a></li>
+                    <li class="mb-2"><a href="#" class="text-secondary text-decoration-none hover-link">Hướng dẫn trả góp 0%</a></li>
+                    <li class="mb-2"><a href="#" class="text-secondary text-decoration-none hover-link">Bảo mật thông tin khách hàng</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <h6 class="fw-bold text-light mb-3">Thông tin liên hệ</h6>
+                <ul class="list-unstyled small text-secondary">
+                    	
+                    <li class="mb-2">
+                        <i class="fa-solid :fa-phone me-2 text-warning"></i>Hotline: 1900 xxxx (8:00 - 21:30)
+                    </li>
+                    <li class="mb-2">
+                        <i class="fa-solid :fa-envelope me-2 text-warning"></i>Email: support@phonestore.vn
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+       
+        
+    </div>
+</footer>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

@@ -8,13 +8,13 @@
 <body>
 
 <div layout:fragment="content">
-    <div class="row justify-content-center">
-        <div class="col-md-10">
-            <div class="card shadow-sm">
-                <div class="card-header bg-dark text-white">
-                    <h5 class="mb-0" th:text="${pageTitle}">Tiêu đề Form</h5>
+    <div class="row justify-content-center py-4">
+        <div class="col-md-11">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-dark text-white py-3">
+                    <h5 class="mb-0 fw-bold" th:text="${pageTitle}">Tiêu đề Form</h5>
                 </div>
-                <div class="card-body">
+                <div class="card-body p-4">
                     
                     <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
                         <i class="fa-solid :fa-triangle-exclamation"></i> <span th:text="${errorMessage}"></span>
@@ -23,16 +23,21 @@
                     <form th:action="@{/admin/products/save}" th:object="${product}" method="post">
                         <input type="hidden" th:field="*{id}" />
 
-                        <div class="row">
-                            <div class="col-md-6">
+                        <div class="row g-4">
+                            
+                            <div class="col-lg-5">
+                                <h5 class="text-primary fw-bold mb-3 border-bottom pb-2">
+                                    <i class="fa-solid :fa-store"></i> 1. Thông tin bán hàng
+                                </h5>
+                                
                                 <div class="mb-3">
-                                    <label for="productName" class="form-label fw-bold">Tên điện thoại:</label>
+                                    <label for="productName" class="form-label small fw-bold text-secondary">Tên điện thoại:</label>
                                     <input type="text" id="productName" th:field="*{name}" class="form-control" placeholder="Ví dụ: iPhone 15 Pro Max" required />
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="category" class="form-label fw-bold">Hãng sản xuất (Danh mục):</label>
-                                    <select id="category" th:field="*{category}" class="form-select" required>
+                                    <label for="category" class="form-label small fw-bold text-secondary">Hãng sản xuất (Danh mục):</label>
+                                    <select id="category" th:field="*{category.id}" class="form-select" required>
                                         <option value="">-- Chọn hãng điện thoại --</option>
                                         <option th:each="cat : ${categories}" 
                                                 th:value="${cat.id}" 
@@ -41,37 +46,90 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="price" class="form-label fw-bold">Giá bán (VND):</label>
-                                    <input type="number" id="price" th:field="*{price}" class="form-control" min="0" placeholder="Nhập giá tiền số thuần (Ví dụ: 25000000)" required />
+                                    <label for="price" class="form-label small fw-bold text-secondary">Giá bán (VND):</label>
+                                    <input type="number" id="price" th:field="*{price}" class="form-control" min="0" placeholder="Ví dụ: 25000000" required />
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="inventory" class="form-label fw-bold">Số lượng trong kho:</label>
-                                    <input type="number" id="inventory" th:field="*{inventory}" class="form-control" min="0" placeholder="Nhập số lượng nhập kho" required />
+                                    <label for="inventory" class="form-label small fw-bold text-secondary">Số lượng trong kho:</label>
+                                    <input type="number" id="inventory" th:field="*{inventory}" class="form-control" min="0" placeholder="Số lượng nhập kho" required />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="image" class="form-label small fw-bold text-secondary">Đường dẫn ảnh sản phẩm (URL):</label>
+                                    <input type="text" id="image" th:field="*{image}" class="form-control" placeholder="https://..." />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="description" class="form-label small fw-bold text-secondary">Mô tả tóm tắt quảng cáo:</label>
+                                    <textarea id="description" th:field="*{description}" class="form-control" rows="3" placeholder="Sơ lược về điểm nổi bật của máy..."></textarea>
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="image" class="form-label fw-bold">Đường dẫn ảnh sản phẩm (URL):</label>
-                                    <input type="text" id="image" th:field="*{image}" class="form-control" placeholder="Nhúng link ảnh online (https://...)" />
-                                    <div class="form-text small">Tạm thời sử dụng link ảnh trực tuyến để đơn giản hóa hệ thống.</div>
-                                </div>
+                            <div class="col-lg-7 border-start">
+                                <h5 class="text-success fw-bold mb-3 border-bottom pb-2">
+                                    <i class="fa-solid :fa-microchip"></i> 2. Cấu hình & Thông số kỹ thuật
+                                </h5>
+                                
+                                <div class="row g-3 p-3 bg-light rounded-3 border">
+                                    <div class="col-md-7">
+                                        <label for="screenTechnology" class="form-label small fw-bold text-muted mb-1">Công nghệ màn hình:</label>
+                                        <input type="text" id="screenTechnology" th:field="*{screenTechnology}" class="form-control" placeholder="OLED, Super Retina XDR..." />
+                                    </div>
+                                    <div class="col-md-5">
+                                        <label for="screenSize" class="form-label small fw-bold text-muted mb-1">Kích thước màn hình:</label>
+                                        <input type="text" id="screenSize" th:field="*{screenSize}" class="form-control" placeholder="6.7 inch, 6.1 inch..." />
+                                    </div>
+                                    
+                                    <div class="col-12">
+                                        <label class="form-label small fw-bold text-muted mb-1">Tính năng màn hình (nếu có):</label>
+                                        <input type="text" th:field="*{screenFeatures}" class="form-control" placeholder="120Hz, HDR10, Always-On..." />
+                                    </div>
 
-                                <div class="mb-3">
-                                    <label for="description" class="form-label fw-bold">Mô tả thông số chi tiết:</label>
-                                    <textarea id="description" th:field="*{description}" class="form-control" rows="5" placeholder="Cấu hình Chip, Ram, Dung lượng Pin..."></textarea>
+                                    <div class="col-md-8">
+                                        <label for="cpuType" class="form-label small fw-bold text-muted mb-1">Bộ vi xử lý (Chipset):</label>
+                                        <input type="text" id="cpuType" th:field="*{cpuType}" class="form-control" placeholder="Apple A17 Pro, Snapdragon 8 Gen 3..." />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="os" class="form-label small fw-bold text-muted mb-1">Hệ điều hành:</label>
+                                        <input type="text" id="os" th:field="*{os}" class="form-control" placeholder="iOS 17, Android 14..." />
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="ram" class="form-label small fw-bold text-muted mb-1">Dung lượng RAM:</label>
+                                        <input type="text" id="ram" th:field="*{ram}" class="form-control" placeholder="8 GB, 12 GB..." />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="rom" class="form-label small fw-bold text-muted mb-1">Bộ nhớ trong (ROM):</label>
+                                        <input type="text" id="rom" th:field="*{rom}" class="form-control" placeholder="256 GB, 512 GB..." />
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="rearCamera" class="form-label small fw-bold text-muted mb-1">Camera sau:</label>
+                                        <input type="text" id="rearCamera" th:field="*{rearCamera}" class="form-control" placeholder="Chính 48 MP & Phụ 12 MP..." />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="frontCamera" class="form-label small fw-bold text-muted mb-1">Camera trước:</label>
+                                        <input type="text" id="frontCamera" th:field="*{frontCamera}" class="form-control" placeholder="12 MP..." />
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label for="simType" class="form-label small fw-bold text-muted mb-1">Hỗ trợ Thẻ SIM:</label>
+                                        <input type="text" id="simType" th:field="*{simType}" class="form-control" placeholder="1 Nano SIM & 1 eSIM, Hỗ trợ 5G..." />
+                                    </div>
                                 </div>
                             </div>
+                            
                         </div>
 
-                        <hr>
-                        <div class="d-flex justify-content-between pt-2">
-                            <a th:href="@{/admin/products}" class="btn btn-secondary">
-                                <i class="fa-solid :fa-arrow-left"></i> Quay lại danh sách
+                        <hr class="my-4">
+                        
+                        <div class="d-flex justify-content-between">
+                            <a th:href="@{/admin/products}" class="btn btn-secondary px-4">
+                                <i class="fa-solid :fa-arrow-left me-1"></i> Quay lại danh sách
                             </a>
-                            <button type="submit" class="btn btn-success px-5">
-                                <i class="fa-solid :fa-floppy-disk"></i> Lưu dữ liệu sản phẩm
+                            <button type="submit" class="btn btn-success px-5 fw-bold">
+                                <i class="fa-solid :fa-floppy-disk me-1"></i> Lưu thông tin máy
                             </button>
                         </div>
                     </form>

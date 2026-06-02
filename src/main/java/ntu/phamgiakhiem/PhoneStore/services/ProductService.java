@@ -70,6 +70,17 @@ public class ProductService {
         product.setInventory(productDetails.getInventory());
         product.setCategory(productDetails.getCategory()); // Gán liên kết danh mục hãng mới
 
+        
+        product.setScreenTechnology(productDetails.getScreenTechnology());
+        product.setScreenSize(productDetails.getScreenSize());
+        product.setScreenFeatures(productDetails.getScreenFeatures());
+        product.setCpuType(productDetails.getCpuType());
+        product.setOs(productDetails.getOs());
+        product.setRam(productDetails.getRam());
+        product.setRom(productDetails.getRom());
+        product.setRearCamera(productDetails.getRearCamera());
+        product.setFrontCamera(productDetails.getFrontCamera());
+        product.setSimType(productDetails.getSimType());
         return productRepository.save(product);
     }
 
