@@ -50,4 +50,6 @@ Hệ thống được phát triển trên nền tảng Java hiện đại kết 
 
 <img width="522" height="537" alt="Image" src="https://github.com/user-attachments/assets/ed7c0c32-7c52-4cea-a6ac-080e0dfbe80e" />
 
+<img width="505" height="455" alt="Image" src="https://github.com/user-attachments/assets/599913ee-97cd-4c39-9f54-6d25bd984b87" />
+
 ### 2. Giao diện trang chủ
